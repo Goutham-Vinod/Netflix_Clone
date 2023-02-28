@@ -25,9 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List screens = [
     HomePage(),
     NotAvailable(),
-    NewNHotPage(),
+    // NewNHotPage(),
     NotAvailable(),
-    DownloadsPage()
+    // DownloadsPage()
   ];
 
   @override

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:netflix_clone/model/trending_movies_model_class.dart';
 import 'package:netflix_clone/numbered_showcase.dart';
 import 'package:netflix_clone/pages/common.dart';
 import 'package:netflix_clone/showcase.dart';
@@ -19,56 +20,6 @@ class _HomePageState extends State<HomePage> {
   final ScrollController scrollController = ScrollController();
   ValueNotifier<bool> appBarCategoriesVisibilityNotifier = ValueNotifier(true);
   bool upperGradVisibility = false;
-
-  loadMovies() async {
-    final trendingMoviesResponse = await http.get(Uri.parse(
-        "https://api.themoviedb.org/3/trending/all/day?api_key=$apiKey"));
-    Map trendingMoviesResults = json.decode(trendingMoviesResponse.body);
-
-    final topRatedTvShowsResponse = await http.get(
-        Uri.parse("https://api.themoviedb.org/3/tv/top_rated?api_key=$apiKey"));
-    Map topRatedTvShowsResults = json.decode(topRatedTvShowsResponse.body);
-
-    final popularTvShowsResponse = await http.get(Uri.parse(
-        "https://api.themoviedb.org/3/tv/popular?api_key=$apiKey&language=en-US&page=1"));
-    Map popularTvShowsResults = json.decode(popularTvShowsResponse.body);
-
-    final upcomingMoviesResponse = await http.get(Uri.parse(
-        "https://api.themoviedb.org/3/movie/upcoming?api_key=$apiKey&language=en-US&page=1"));
-    Map upcomingMoviesResults = json.decode(upcomingMoviesResponse.body);
-
-    final topRatedMoviesResponse = await http.get(Uri.parse(
-        "https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey&language=en-US&page=1"));
-    Map topRatedMoviesResults = json.decode(topRatedMoviesResponse.body);
-
-    final popularMoviesResponse = await http.get(Uri.parse(
-        "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey&language=en-US&page=1"));
-    Map popularMoviesResults = json.decode(popularMoviesResponse.body);
-
-    final nowPlayingMoviesResponse = await http.get(Uri.parse(
-        "https://api.themoviedb.org/3/movie/now_playing?api_key=$apiKey&language=en-US&page=1"));
-    Map nowPlayingMoviesResults = json.decode(nowPlayingMoviesResponse.body);
-
-    try {
-      setState(() {
-        trendingMovies = trendingMoviesResults['results'];
-        topRatedTvShows = topRatedTvShowsResults['results'];
-        popularTvShows = popularTvShowsResults['results'];
-        upcomingMovies = upcomingMoviesResults['results'];
-        topRatedMovies = topRatedMoviesResults['results'];
-        popularMovies = popularMoviesResults['results'];
-        nowPlayingMovies = nowPlayingMoviesResults['results'];
-      });
-    } catch (e) {}
-  }
-
-  @override
-  void initState() {
-    setState(() {
-      loadMovies();
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,25 +128,28 @@ class _HomePageState extends State<HomePage> {
                     ]),
                     Showcase(
                         title: "Trending Movies",
-                        showcaseContent: trendingMovies),
+                        path: "$baseUrl/trending/all/day?api_key=$apiKey"),
                     Showcase(
-                        title: "Popular Movies",
-                        showcaseContent: popularMovies),
-                    NumberedShowcase(
-                        title: "Top Rated Movies",
-                        showcaseContent: topRatedMovies),
+                        title: "Popular movies",
+                        path: "$baseUrl/movie/popular?api_key=$apiKey"),
+                    Showcase(
+                        title: "Top rated Movies",
+                        path: "$baseUrl/tv/top_rated?api_key=$apiKey"),
+                    Showcase(
+                        title: "Top rated TV shows",
+                        path: "$baseUrl/tv/top_rated?api_key=$apiKey"),
                     Showcase(
                         title: "Popular TV Shows",
-                        showcaseContent: popularTvShows),
+                        path: "$baseUrl/tv/popular?api_key=$apiKey"),
                     Showcase(
-                        title: "Upcoming Movies",
-                        showcaseContent: upcomingMovies),
-                    NumberedShowcase(
-                        showcaseContent: topRatedTvShows,
-                        title: "Top Rated TV Shows"),
+                        title: "Upcomng Movies",
+                        path: "$baseUrl/movie/upcoming?api_key=$apiKey"),
                     Showcase(
-                        title: "Now Playing Movies",
-                        showcaseContent: nowPlayingMovies),
+                        title: "Top Rated movies",
+                        path: "$baseUrl/movie/top_rated?api_key=$apiKey"),
+                    Showcase(
+                        title: "Now Playing movies",
+                        path: "$baseUrl/movie/now_playing?api_key=$apiKey"),
                   ],
                 ),
               ),

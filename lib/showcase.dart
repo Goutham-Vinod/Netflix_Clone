@@ -3,22 +3,40 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:netflix_clone/model/trending_movies_model_class.dart';
+import 'package:netflix_clone/pages/common.dart';
 
 class Showcase extends StatefulWidget {
-  Showcase({required this.title, required this.showcaseContent, super.key});
+  Showcase({required this.title, required this.path, super.key});
 
   String title;
-  List? showcaseContent;
+  String path;
 
   @override
   State<Showcase> createState() => _ShowcaseState();
 }
 
 class _ShowcaseState extends State<Showcase> {
+  TrendingMoviesModelClass? trendingMoviesObj;
+
   @override
   void initState() {
     super.initState();
+    setState(() {
+      loadData();
+    });
+  }
+
+  loadData() async {
+    final trendingMoviesResponse = await http.get(Uri.parse(widget.path));
+    if (trendingMoviesResponse.statusCode == 200) {
+      Map<String, dynamic> trendingMoviesResults =
+          json.decode(trendingMoviesResponse.body);
+      trendingMoviesObj =
+          TrendingMoviesModelClass.fromJson(trendingMoviesResults);
+    }
+    return trendingMoviesObj;
   }
 
   @override
@@ -37,40 +55,46 @@ class _ShowcaseState extends State<Showcase> {
           ),
           Container(
             height: 270,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.showcaseContent?.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
-                    child: Container(
-                      width: 140,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        'https://image.tmdb.org/t/p/w500' +
-                                            widget.showcaseContent![index]
-                                                ['poster_path']))),
+            child: FutureBuilder(
+              future: loadData(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: trendingMoviesObj?.results.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {},
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+                          child: Container(
+                            width: 140,
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(trendingMoviesObj
+                                                      ?.results[index]
+                                                      .posterPath ==
+                                                  null
+                                              ? kImageErrorUrl
+                                              : baseImageUrl +
+                                                  trendingMoviesObj!
+                                                      .results[index]
+                                                      .posterPath!))),
+                                ),
+                              ],
+                            ),
                           ),
-                          // const SizedBox(
-                          //   height: 5,
-                          // ),
-                          // Text(truncateWithEllipsis(
-                          //     19,
-                          //     showcaseContent[index]['title'] ??
-                          //         showcaseContent[index]['original_name'] ??
-                          //         "loading"))
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  return Center(child: const Text("Loading..."));
+                }
               },
             ),
           )

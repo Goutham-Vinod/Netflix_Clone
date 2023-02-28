@@ -1,13 +1,43 @@
-import 'package:bordered_text/bordered_text.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:http/http.dart' as http;
+import 'package:netflix_clone/model/trending_movies_model_class.dart';
+import 'package:netflix_clone/pages/common.dart';
 
-class NumberedShowcase extends StatelessWidget {
-  NumberedShowcase(
-      {required this.showcaseContent, required this.title, super.key});
+class NumberedShowcase extends StatefulWidget {
+  NumberedShowcase({required this.title, required this.path, super.key});
+
   String title;
-  List showcaseContent;
+  String path;
+
+  @override
+  State<NumberedShowcase> createState() => _NumberedShowcaseState();
+}
+
+class _NumberedShowcaseState extends State<NumberedShowcase> {
+  TrendingMoviesModelClass? trendingMoviesObj;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      loadData();
+    });
+  }
+
+  loadData() async {
+    final trendingMoviesResponse = await http.get(Uri.parse(widget.path));
+    if (trendingMoviesResponse.statusCode == 200) {
+      Map<String, dynamic> trendingMoviesResults =
+          json.decode(trendingMoviesResponse.body);
+      trendingMoviesObj =
+          TrendingMoviesModelClass.fromJson(trendingMoviesResults);
+    }
+    return trendingMoviesObj;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,7 +46,7 @@ class NumberedShowcase extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
+            widget.title,
             style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.w500,
@@ -24,54 +54,51 @@ class NumberedShowcase extends StatelessWidget {
           ),
           Container(
             height: 270,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: showcaseContent.length,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 20, 5, 10),
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: 140,
+            child: FutureBuilder(
+              future: loadData(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: trendingMoviesObj?.results.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {},
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
                           child: Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        'https://image.tmdb.org/t/p/w500' +
-                                            showcaseContent[index]
-                                                ['poster_path']))),
+                            width: 140,
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(trendingMoviesObj
+                                                      ?.results[index]
+                                                      .posterPath ==
+                                                  null
+                                              ? kImageErrorUrl
+                                              : baseImageUrl +
+                                                  trendingMoviesObj!
+                                                      .results[index]
+                                                      .posterPath!))),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        Positioned(
-                            left: -7,
-                            bottom: 70,
-                            child: BorderedText(
-                                strokeWidth: 8,
-                                strokeColor: Colors.white,
-                                child: Text(
-                                  "${index + 1}",
-                                  style: TextStyle(
-                                      fontSize: 75, color: Colors.black),
-                                ))),
-                      ],
-                    ),
-                  ),
-                );
+                      );
+                    },
+                  );
+                } else {
+                  return Center(child: const Text("Loading..."));
+                }
               },
             ),
           )
         ],
       ),
     );
-  }
-
-  String truncateWithEllipsis(int cutoff, String myString) {
-    return (myString.length <= cutoff)
-        ? myString
-        : '${myString.substring(0, cutoff)}...';
   }
 }
