@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:netflix_clone/home_screen.dart';
 import 'package:flutter/services.dart';
+import 'package:netflix_clone/splash_screen.dart';
+import 'home.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -20,6 +21,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(brightness: Brightness.dark, primaryColor: Colors.red),
-        home: HomeScreen());
+        home: SplashScreen());
   }
 }

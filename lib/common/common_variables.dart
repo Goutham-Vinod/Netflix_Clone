@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:netflix_clone/model/trending_movies_model_class.dart';
+import 'package:netflix_clone/model/model_class.dart';
 
 String kImageUrl =
     "https://static.theprint.in/wp-content/uploads/2022/07/stranger_things_main20220701132803.jpg";
@@ -13,8 +13,4 @@ final String apiKey = "46b56132b1ed6ad76bc0ecbd2e7b0995";
 const String baseUrl = "https://api.themoviedb.org/3/";
 const String baseImageUrl = "https://image.tmdb.org/t/p/w500";
 
-String truncateWithEllipsis(int cutoff, String myString) {
-  return (myString.length <= cutoff)
-      ? myString
-      : '${myString.substring(0, cutoff)}...';
-}
+ModelClass? randomObj;

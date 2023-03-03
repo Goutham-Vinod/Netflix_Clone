@@ -1,20 +1,20 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:netflix_clone/model/trending_movies_model_class.dart';
-import 'package:netflix_clone/numbered_showcase.dart';
-import 'package:netflix_clone/pages/common.dart';
-import 'package:netflix_clone/showcase.dart';
+import 'package:netflix_clone/model/model_class.dart';
+import 'package:netflix_clone/widgets/numbered_showcase.dart';
+import 'package:netflix_clone/common/common_variables.dart';
+import 'package:netflix_clone/widgets/showcase.dart';
 import 'package:http/http.dart' as http;
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   int appBarOpacy = 0; //255 max and 0 min
   ValueNotifier<bool> appBarVisibilityNotifier = ValueNotifier(false);
   final ScrollController scrollController = ScrollController();
@@ -126,30 +126,35 @@ class _HomePageState extends State<HomePage> {
                         ),
                       )
                     ]),
-                    Showcase(
-                        title: "Trending Movies",
-                        path: "$baseUrl/trending/all/day?api_key=$apiKey"),
-                    Showcase(
-                        title: "Popular movies",
-                        path: "$baseUrl/movie/popular?api_key=$apiKey"),
-                    Showcase(
-                        title: "Top rated Movies",
-                        path: "$baseUrl/tv/top_rated?api_key=$apiKey"),
-                    Showcase(
-                        title: "Top rated TV shows",
-                        path: "$baseUrl/tv/top_rated?api_key=$apiKey"),
-                    Showcase(
-                        title: "Popular TV Shows",
-                        path: "$baseUrl/tv/popular?api_key=$apiKey"),
-                    Showcase(
-                        title: "Upcomng Movies",
-                        path: "$baseUrl/movie/upcoming?api_key=$apiKey"),
-                    Showcase(
-                        title: "Top Rated movies",
-                        path: "$baseUrl/movie/top_rated?api_key=$apiKey"),
-                    Showcase(
-                        title: "Now Playing movies",
-                        path: "$baseUrl/movie/now_playing?api_key=$apiKey"),
+                    Column(
+                      children: [
+                        Showcase(
+                            title: "Popular movies",
+                            path: "$baseUrl/movie/popular?api_key=$apiKey"),
+                        NumberedShowcase(
+                            title: "Top rated Movies",
+                            path: "$baseUrl/tv/top_rated?api_key=$apiKey"),
+                        Showcase(
+                            title: "Popular TV Shows",
+                            path: "$baseUrl/tv/popular?api_key=$apiKey"),
+                        NumberedShowcase(
+                            title: "Top rated TV shows",
+                            path: "$baseUrl/tv/top_rated?api_key=$apiKey"),
+                        Showcase(
+                            title: "Upcomng Movies",
+                            path: "$baseUrl/movie/upcoming?api_key=$apiKey"),
+                        NumberedShowcase(
+                            title: "Top Rated movies",
+                            path: "$baseUrl/movie/top_rated?api_key=$apiKey"),
+                        Showcase(
+                            title: "Trending Movies",
+                            path: "$baseUrl/trending/all/day?api_key=$apiKey"),
+                        Showcase(
+                            title: "Now Playing movies",
+                            path: "$baseUrl/movie/now_playing?api_key=$apiKey"),
+                        SizedBox(height: 80),
+                      ],
+                    )
                   ],
                 ),
               ),

@@ -1,16 +1,12 @@
-// To parse this JSON data, do
-//
-//     final responseResult = responseResultFromJson(jsonString);
-
 import 'dart:convert';
 
-ResponseResult responseResultFromJson(String str) =>
-    ResponseResult.fromJson(json.decode(str));
+ModelClass ModelClassFromJson(String str) =>
+    ModelClass.fromJson(json.decode(str));
 
-String responseResultToJson(ResponseResult data) => json.encode(data.toJson());
+String ModelClassToJson(ModelClass data) => json.encode(data.toJson());
 
-class ResponseResult {
-  ResponseResult({
+class ModelClass {
+  ModelClass({
     required this.page,
     required this.results,
     required this.totalPages,
@@ -22,7 +18,7 @@ class ResponseResult {
   int totalPages;
   int totalResults;
 
-  factory ResponseResult.fromJson(Map<String, dynamic> json) => ResponseResult(
+  factory ModelClass.fromJson(Map<String, dynamic> json) => ModelClass(
         page: json["page"],
         results:
             List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
@@ -40,42 +36,42 @@ class ResponseResult {
 
 class Result {
   Result({
-    required this.adult,
-    required this.backdropPath,
-    required this.id,
+    this.adult,
+    this.backdropPath,
+    this.id,
     this.title,
-    // required this.originalLanguage,
+    this.originalLanguage,
     this.originalTitle,
-    required this.overview,
-    required this.posterPath,
-    required this.mediaType,
-    required this.genreIds,
-    required this.popularity,
+    this.overview,
+    this.posterPath,
+    this.mediaType,
+    this.genreIds,
+    this.popularity,
     this.releaseDate,
     this.video,
-    required this.voteAverage,
-    required this.voteCount,
+    this.voteAverage,
+    this.voteCount,
     this.name,
     this.originalName,
     this.firstAirDate,
     this.originCountry,
   });
 
-  bool adult;
-  String backdropPath;
-  int id;
+  bool? adult;
+  String? backdropPath;
+  int? id;
   String? title;
-  // OriginalLanguage originalLanguage;
+  OriginalLanguage? originalLanguage;
   String? originalTitle;
-  String overview;
-  String posterPath;
-  MediaType mediaType;
-  List<int> genreIds;
-  double popularity;
+  String? overview;
+  String? posterPath;
+  MediaType? mediaType;
+  List<int>? genreIds;
+  double? popularity;
   DateTime? releaseDate;
   bool? video;
-  double voteAverage;
-  int voteCount;
+  double? voteAverage;
+  int? voteCount;
   String? name;
   String? originalName;
   DateTime? firstAirDate;
@@ -86,12 +82,11 @@ class Result {
         backdropPath: json["backdrop_path"],
         id: json["id"],
         title: json["title"],
-        // originalLanguage:
-        //     originalLanguageValues.map[json["original_language"]]!,
+        originalLanguage: originalLanguageValues.map[json["original_language"]],
         originalTitle: json["original_title"],
         overview: json["overview"],
         posterPath: json["poster_path"],
-        mediaType: mediaTypeValues.map[json["media_type"]]!,
+        mediaType: mediaTypeValues.map[json["media_type"]],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         popularity: json["popularity"]?.toDouble(),
         releaseDate: json["release_date"] == null
@@ -102,12 +97,9 @@ class Result {
         voteCount: json["vote_count"],
         name: json["name"],
         originalName: json["original_name"],
-        firstAirDate: json["first_air_date"] == null
-            ? null
-            : DateTime.parse(json["first_air_date"]),
         originCountry: json["origin_country"] == null
             ? []
-            : List<String>.from(json["origin_country"]!.map((x) => x)),
+            : List<String>.from(json["origin_country"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -115,12 +107,11 @@ class Result {
         "backdrop_path": backdropPath,
         "id": id,
         "title": title,
-        // "original_language": originalLanguageValues.reverse[originalLanguage],
+        "original_language": originalLanguageValues.reverse[originalLanguage],
         "original_title": originalTitle,
         "overview": overview,
         "poster_path": posterPath,
         "media_type": mediaTypeValues.reverse[mediaType],
-        "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
         "popularity": popularity,
         "release_date":
             "${releaseDate!.year.toString().padLeft(4, '0')}-${releaseDate!.month.toString().padLeft(2, '0')}-${releaseDate!.day.toString().padLeft(2, '0')}",
@@ -142,13 +133,10 @@ enum MediaType { MOVIE, TV }
 final mediaTypeValues =
     EnumValues({"movie": MediaType.MOVIE, "tv": MediaType.TV});
 
-enum OriginalLanguage { EN, ES, KO }
+enum OriginalLanguage { EN, FR }
 
-final originalLanguageValues = EnumValues({
-  "en": OriginalLanguage.EN,
-  "es": OriginalLanguage.ES,
-  "ko": OriginalLanguage.KO
-});
+final originalLanguageValues =
+    EnumValues({"en": OriginalLanguage.EN, "fr": OriginalLanguage.FR});
 
 class EnumValues<T> {
   Map<String, T> map;

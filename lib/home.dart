@@ -3,31 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:netflix_clone/pages/common.dart';
-import 'package:netflix_clone/pages/downloads_page.dart';
-import 'package:netflix_clone/pages/home_page.dart';
-import 'package:netflix_clone/pages/new_n_hot_page.dart';
-import 'package:netflix_clone/pages/not_available.dart';
-import 'package:netflix_clone/response_model.dart';
-import 'package:netflix_clone/showcase.dart';
+import 'package:netflix_clone/common/common_variables.dart';
+import 'package:netflix_clone/screens/home_page_screen.dart';
+import 'package:netflix_clone/screens/new_n_hot_page_screen.dart';
+import 'package:netflix_clone/screens/not_available.dart';
+import 'screens/downloads_screen.dart';
+import 'widgets/showcase.dart';
 import 'package:http/http.dart' as http;
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<Home> createState() => _HomeState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeState extends State<Home> {
   int currentNaviIndex = 0;
 
   List screens = [
-    HomePage(),
+    HomeScreen(),
     NotAvailable(),
-    // NewNHotPage(),
+    NewNHotScreen(),
     NotAvailable(),
-    // DownloadsPage()
+    DownloadsScreen()
   ];
 
   @override

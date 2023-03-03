@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:http/http.dart' as http;
-import 'package:netflix_clone/model/trending_movies_model_class.dart';
-import 'package:netflix_clone/pages/common.dart';
+import 'package:netflix_clone/model/model_class.dart';
+import 'package:netflix_clone/common/common_variables.dart';
 
 class Showcase extends StatefulWidget {
   Showcase({required this.title, required this.path, super.key});
@@ -18,7 +18,7 @@ class Showcase extends StatefulWidget {
 }
 
 class _ShowcaseState extends State<Showcase> {
-  TrendingMoviesModelClass? trendingMoviesObj;
+  ModelClass? trendingMoviesObj;
 
   @override
   void initState() {
@@ -33,16 +33,17 @@ class _ShowcaseState extends State<Showcase> {
     if (trendingMoviesResponse.statusCode == 200) {
       Map<String, dynamic> trendingMoviesResults =
           json.decode(trendingMoviesResponse.body);
-      trendingMoviesObj =
-          TrendingMoviesModelClass.fromJson(trendingMoviesResults);
+      trendingMoviesObj = ModelClass.fromJson(trendingMoviesResults);
     }
+
+    randomObj = trendingMoviesObj;
     return trendingMoviesObj;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 0, 2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -54,7 +55,7 @@ class _ShowcaseState extends State<Showcase> {
             ),
           ),
           Container(
-            height: 270,
+            height: 225,
             child: FutureBuilder(
               future: loadData(),
               builder: (context, snapshot) {
@@ -66,26 +67,20 @@ class _ShowcaseState extends State<Showcase> {
                       return InkWell(
                         onTap: () {},
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+                          padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
                           child: Container(
                             width: 140,
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: NetworkImage(trendingMoviesObj
-                                                      ?.results[index]
-                                                      .posterPath ==
-                                                  null
-                                              ? kImageErrorUrl
-                                              : baseImageUrl +
-                                                  trendingMoviesObj!
-                                                      .results[index]
-                                                      .posterPath!))),
-                                ),
-                              ],
+                            child: Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(trendingMoviesObj
+                                                  ?.results[index].posterPath ==
+                                              null
+                                          ? kImageErrorUrl
+                                          : baseImageUrl +
+                                              trendingMoviesObj!.results[index]
+                                                  .posterPath!))),
                             ),
                           ),
                         ),
