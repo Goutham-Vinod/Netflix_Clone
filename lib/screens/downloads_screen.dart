@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:netflix_clone/common/common_variables.dart';
+import 'package:netflix_clone/screens/search_screen.dart';
 
 class DownloadsScreen extends StatelessWidget {
   const DownloadsScreen({super.key});
@@ -23,9 +24,16 @@ class DownloadsScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               Spacer(),
-              Icon(
-                Icons.search,
-                size: 35,
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                    return SearchScreen();
+                  }));
+                },
+                icon: Icon(
+                  Icons.search,
+                  size: 35,
+                ),
               ),
               SizedBox(width: 20),
               Image.asset(

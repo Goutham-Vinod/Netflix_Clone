@@ -12,11 +12,6 @@ class EveryoneWatchingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (obj == null) {
-      print('obj not recieved');
-    } else {
-      print('obj recieved');
-    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

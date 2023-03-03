@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:netflix_clone/model/model_class.dart';
+import 'package:netflix_clone/screens/search_screen.dart';
 import 'package:netflix_clone/widgets/numbered_showcase.dart';
 import 'package:netflix_clone/common/common_variables.dart';
 import 'package:netflix_clone/widgets/showcase.dart';
@@ -184,7 +185,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding:
                                     const EdgeInsets.fromLTRB(0, 30, 15, 0),
                                 child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(builder: (ctx) {
+                                      return SearchScreen();
+                                    }));
+                                  },
                                   icon: Icon(Icons.search),
                                   iconSize: 30,
                                 ),
@@ -267,7 +273,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 30, 15, 0),
                                     child: IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(builder: (ctx) {
+                                          return SearchScreen();
+                                        }));
+                                      },
                                       icon: Icon(Icons.search),
                                       iconSize: 30,
                                     ),

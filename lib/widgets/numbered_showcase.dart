@@ -75,6 +75,8 @@ class _NumberedShowcaseState extends State<NumberedShowcase> {
                                     Container(
                                       height: 200,
                                       decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           image: DecorationImage(
                                               image: NetworkImage(obj
                                                           ?.results[index]
