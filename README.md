@@ -1,3 +1,4 @@
 # netflix_clone
 
-A new Flutter project.
+A Sample flutter project which have the UI of Netflix.
+The datas are fetch from TMDB Api.
